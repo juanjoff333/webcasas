@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con Logo y Buscador</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo">
+            <h1>Red Cat</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button><img src="img/lupa.png" alt="Buscar"></button>
+        </div>
+    </header>
+
+    <div class="image-container">
+        <a id="image-link" href="casa1.html">
+            <div class="text-overlay" id="image-text">Casa Moderna y Espaciosa</div>
+            <img id="image1" src="img/1.jpg" alt="Casa 1">
+            <img id="image2" src="img/2.jpg" class="hidden" alt="Casa 2">
+        </a>
+    </div>
+
+    <div class="info-section">
+        <div class="image-wrapper">
+            <a href="casa1.html">
+                <img src="img/casa1.jpg" alt="Casa Descripción">
+            </a>
+        </div>
+        <div class="info-text">
+            <h2>Casa Moderna y Espaciosa</h2>
+            <p>Esta hermosa casa cuenta con un diseño moderno, amplios espacios y acabados de alta calidad. Ideal para familias que buscan confort y estilo.</p>
+        </div>
+    </div>
+
+    <script>
+        const images = [
+            {
+                src: "img/1.jpg",
+                link: "casa1.html",
+                text: "",
+                element: document.getElementById('image1')
+            },
+            {
+                src: "img/2.jpg",
+                link: "casa2.html",
+                text: "",
+                element: document.getElementById('image2')
+            }
+        ];
+
+        let currentIndex = 0;
+        const imageLink = document.getElementById('image-link');
+        const imageText = document.getElementById('image-text');
+
+        setInterval(() => {
+            images[currentIndex].element.classList.add('hidden');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].element.classList.remove('hidden');
+            imageLink.href = images[currentIndex].link;
+            imageText.textContent = images[currentIndex].text;
+        }, 5000);
+    </script>
+</body>
+</html>
