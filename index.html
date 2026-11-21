@@ -1,71 +1,283 @@
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Logo y Buscador</title>
+
+    <title>Red Cat | Venta de Inmuebles</title>
+
+    <!-- Hoja de estilos -->
     <link rel="stylesheet" href="css/styles.css">
-    
 </head>
+
 <body>
-    <header>
+
+    <!-- =====================================
+         1. ENCABEZADO PRINCIPAL
+    ====================================== -->
+    <header class="header">
+
         <div class="logo">
-            <img src="img/logo.png" alt="Logo">
+            <img src="img/logo.png" alt="Logo Red Cat">
             <h1>Red Cat</h1>
         </div>
+
+        <!-- Buscador -->
         <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button><img src="img/lupa.png" alt="Buscar"></button>
+            <input type="search" placeholder="Buscar casas, terrenos...">
+            <button type="button">
+                <img src="img/lupa.png" alt="Buscar">
+            </button>
         </div>
+
     </header>
 
-    <div class="image-container">
+
+    <!-- =====================================
+         2. MENÚ DE NAVEGACIÓN
+    ====================================== -->
+    <nav class="navbar">
+
+        <ul>
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="#casas">Casas</a></li>
+            <li><a href="#propiedades">Propiedades</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+
+    </nav>
+
+
+    <!-- =====================================
+         3. BANNER PRINCIPAL / CARRUSEL
+    ====================================== -->
+    <section class="hero">
+
         <a id="image-link" href="casa1.html">
-            <div class="text-overlay" id="image-text">Casa Moderna y Espaciosa</div>
-            <img id="image1" src="img/1.jpg" alt="Casa 1">
-            <img id="image2" src="img/2.jpg" class="hidden" alt="Casa 2">
+
+            <div class="hero-overlay">
+
+                <h2 id="image-text">
+                    Encuentra tu casa ideal
+                </h2>
+
+                <p>
+                    Descubre las mejores oportunidades inmobiliarias.
+                </p>
+
+                <span class="hero-button">
+                    Ver propiedad
+                </span>
+
+            </div>
+
+            <img id="image1" src="img/1.jpg" alt="Casa moderna">
+
+            <img id="image2" src="img/2.jpg"
+                 class="hidden" alt="Casa en venta">
+
         </a>
-    </div>
 
-    <div class="info-section">
-        <div class="image-wrapper">
-            <a href="casa1.html">
-                <img src="img/casa1.jpg" alt="Casa Descripción">
-            </a>
-        </div>
-        <div class="info-text">
-            <h2>Casa Moderna y Espaciosa</h2>
-            <p>Esta hermosa casa cuenta con un diseño moderno, amplios espacios y acabados de alta calidad. Ideal para familias que buscan confort y estilo.</p>
-        </div>
-    </div>
+    </section>
 
+
+    <!-- =====================================
+         4. SECCIÓN DE PROPIEDADES DESTACADAS
+    ====================================== -->
+    <main>
+
+        <section class="properties" id="propiedades">
+
+            <div class="section-title">
+                <h2>Propiedades destacadas</h2>
+                <p>Conoce algunas de nuestras mejores opciones.</p>
+            </div>
+
+
+            <!-- Propiedad 1 -->
+            <article class="property-card" id="casas">
+
+                <div class="property-image">
+                    <a href="casa1.html">
+                        <img src="img/casa1.jpg" alt="Casa moderna">
+                    </a>
+                </div>
+
+                <div class="property-info">
+
+                    <h3>Casa Moderna y Espaciosa</h3>
+
+                    <p>
+                        Esta hermosa casa cuenta con un diseño moderno,
+                        amplios espacios y acabados de alta calidad.
+                        Ideal para familias que buscan confort y estilo.
+                    </p>
+
+                    <a href="casa1.html" class="property-button">
+                        Ver detalles
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- Propiedad 2 -->
+            <article class="property-card">
+
+                <div class="property-image">
+                    <a href="casa2.html">
+                        <img src="img/casa2.jpg" alt="Casa familiar">
+                    </a>
+                </div>
+
+                <div class="property-info">
+
+                    <h3>Casa Familiar</h3>
+
+                    <p>
+                        Vivienda con espacios cómodos, excelente
+                        distribución y ambientes adecuados para
+                        toda la familia.
+                    </p>
+
+                    <a href="casa2.html" class="property-button">
+                        Ver detalles
+                    </a>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =====================================
+             5. SECCIÓN SOBRE NOSOTROS
+        ====================================== -->
+        <section class="about" id="nosotros">
+
+            <h2>Sobre Red Cat</h2>
+
+            <p>
+                En Red Cat ofrecemos un espacio para encontrar
+                propiedades inmobiliarias, facilitando la búsqueda
+                de casas y otros inmuebles mediante información
+                organizada y accesible.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================
+         6. PIE DE PÁGINA (FOOTER)
+    ====================================== -->
+    <footer class="footer" id="contacto">
+
+        <div class="footer-container">
+
+            <!-- Información de la empresa -->
+            <div class="footer-section">
+
+                <h3>Red Cat</h3>
+
+                <p>
+                    Tu espacio para encontrar la propiedad
+                    que estás buscando.
+                </p>
+
+            </div>
+
+
+            <!-- Enlaces rápidos -->
+            <div class="footer-section">
+
+                <h3>Enlaces rápidos</h3>
+
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#casas">Casas</a></li>
+                    <li><a href="#propiedades">Propiedades</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                </ul>
+
+            </div>
+
+
+            <!-- Información de contacto -->
+            <div class="footer-section">
+
+                <h3>Contacto</h3>
+
+                <p>Correo: contacto@redcat.com</p>
+                <p>Teléfono: +591 00000000</p>
+                <p>Ubicación: Bolivia</p>
+
+            </div>
+
+
+        </div>
+
+        <!-- Derechos reservados -->
+        <div class="footer-bottom">
+
+            <p>
+                &copy; 2026 Red Cat.
+                Todos los derechos reservados.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================
+         7. JAVASCRIPT DEL CARRUSEL
+    ====================================== -->
     <script>
+
         const images = [
             {
                 src: "img/1.jpg",
                 link: "casa1.html",
-                text: "",
-                element: document.getElementById('image1')
+                text: "Casa Moderna y Espaciosa"
             },
             {
                 src: "img/2.jpg",
                 link: "casa2.html",
-                text: "",
-                element: document.getElementById('image2')
+                text: "Encuentra tu nuevo hogar"
             }
         ];
 
         let currentIndex = 0;
-        const imageLink = document.getElementById('image-link');
-        const imageText = document.getElementById('image-text');
+
+        const image1 = document.getElementById("image1");
+        const image2 = document.getElementById("image2");
+
+        const imageLink = document.getElementById("image-link");
+        const imageText = document.getElementById("image-text");
+
+        const imageElements = [image1, image2];
 
         setInterval(() => {
-            images[currentIndex].element.classList.add('hidden');
+
             currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].element.classList.remove('hidden');
+
+            imageElements[0].classList.toggle("hidden");
+            imageElements[1].classList.toggle("hidden");
+
             imageLink.href = images[currentIndex].link;
+
             imageText.textContent = images[currentIndex].text;
+
         }, 5000);
+
     </script>
+
 </body>
 </html>
