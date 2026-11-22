@@ -33,6 +33,8 @@
                 <img src="img/lupa.png" alt="Buscar">
             </button>
         </div>
+     <!-- modo dia y noche -->
+        <button type="button" id="btn-tema" class="boton-modo">☀️ Modo día</button>
 
     </header>
 
@@ -276,6 +278,11 @@
         }, 5000);
 
     </script>
+
+      <!-- El script va al FINAL, justo antes de cerrar el body:
+       así el navegador ya leyó todo el HTML y querySelector
+       sí encuentra los botones. Si lo pones arriba, no los halla. -->
+  <script src="script.js"></script>
 
 </body>
 </html>
