@@ -1,4 +1,4 @@
-<?php
+<?php 
 $servername = "localhost";
 $username = "root";
 $password = ""; // Cambiar si tienes una contraseña configurada
@@ -17,290 +17,322 @@ if (!$conn->set_charset("utf8")) {
     die("Error configurando la codificación UTF-8: " . $conn->error);
 }
 
-// Obtener datos de la base de datos
-$sql = "SELECT * FROM info_casas";
+// Inicializar variables
+$search = "";
+
+
+// Manejar búsqueda
+if (isset($_GET['search'])) {
+    $search = $conn->real_escape_string($_GET['search']);
+    $sql = "SELECT * FROM info_casas WHERE titulo LIKE '%$search%' OR precio LIKE '%$search%'";
+} else {
+    $sql = "SELECT * FROM info_casas";
+}
+
 $result = $conn->query($sql);
 
 if (!$result) {
     die("Error ejecutando la consulta: " . $conn->error);
 }
+
+
+// Obtener las casas vendidas
+$casas_vendidas = [];
+$ventas_result = $conn->query("SELECT id_casa FROM clientes");
+while ($row = $ventas_result->fetch_assoc()) {
+    $casas_vendidas[] = $row['id_casa'];
+}
+
+
+
 ?>
 
-<?php
-header('Content-Type: text/html; charset=utf-8');
-?>
+
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Logo y Buscador</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
 
-        header {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: white;
-        }
+    <title>Red Cat | Venta de Inmuebles</title>
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .logo h1 {
-            color: rgb(235, 12, 12);
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-            max-width: 600px;
-            margin-left: 20px;
-            margin-right: 20px;
-            justify-content: center;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #df1414;
-            border-radius: 5px 0 0 5px;
-            outline: none;
-        }
-
-        .search-bar button {
-            padding: 10px;
-            background-color: red;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 0 5px 5px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar button img {
-            width: 20px;
-        }
-
-        .search-bar button:hover {
-            background-color: darkred;
-        }
-
-        .image-container {
-            width: 100vw;
-            height: 60vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .image-container img {
-            width: 100vw;
-            height: 60vh;
-            object-fit: fill;
-            position: absolute;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .image-container img.hidden {
-            opacity: 0;
-        }
-
-        .text-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: center;
-            z-index: 1;
-        }
-
-        .info-section {
-            display: flex;
-            width: 90%;
-            margin: 20px auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-wrapper {
-            width: 40%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .image-wrapper a {
-            display: block;
-        }
-
-        .image-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: filter 0.3s ease, transform 0.3s ease;
-        }
-
-        .image-wrapper img:hover {
-            filter: brightness(70%);
-            transform: scale(1.05);
-            cursor: pointer;
-        }
-
-        .info-text {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .search-bar {
-                margin-left: 5px;
-                width: 100%;
-            }
-
-            .search-bar input {
-                border-radius: 5px;
-            }
-
-            .search-bar button {
-                border-radius: 5px;
-                width: auto;
-                padding: 8px 12px;
-            }
-
-            .info-section {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .image-wrapper {
-                width: 100%;
-            }
-
-            .info-text {
-                text-align: center;
-            }
-        }
-    </style>
+    <!-- Hoja de estilos -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-    
-    <header>
+
+<!-- CONTENEDOR DEL ENCABEZADO Y MENÚ -->
+<div class="top-container">
+
+    <!-- ENCABEZADO -->
+    <header class="header">
+
         <div class="logo">
-            <img src="img/logo.png" alt="Logo">
+            <img src="img/logo.png" alt="Logo Red Cat">
             <h1>Red Cat</h1>
         </div>
+
+        <!-- Buscador -->
         <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button><img src="img/lupa.png" alt="Buscar"></button>
+            <input type="search" placeholder="Buscar casas, terrenos...">
+
+            <button type="button">
+                <img src="img/lupa.png" alt="Buscar">
+            </button>
         </div>
+     <!-- modo dia y noche -->
+        <button type="button" id="btn-tema" class="boton-modo">☀️ Modo día</button>
+
     </header>
 
-    <div class="image-container">
+    <!-- MENÚ DE NAVEGACIÓN -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="#casas">Casas</a></li>
+            <li><a href="#propiedades">Propiedades</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+</div>
+
+    <!-- =====================================
+         3. BANNER PRINCIPAL / CARRUSEL
+    ====================================== -->
+    <section class="hero">
+
         <a id="image-link" href="casa1.html">
-            <div class="text-overlay" id="image-text">Casa Moderna y Espaciosa</div>
-            <img id="image1" src="img/1.jpg" alt="Casa 1">
-            <img id="image2" src="img/2.jpg" class="hidden" alt="Casa 2">
+
+            <div class="hero-overlay">
+
+                <h2 id="image-text">
+                    Encuentra tu casa ideal
+                </h2>
+
+                <p>
+                    Descubre las mejores oportunidades inmobiliarias.
+                </p>
+
+                <span class="hero-button">
+                    Ver propiedad
+                </span>
+
+            </div>
+
+            <img id="image1" src="img/1.jpg" alt="Casa moderna">
+
+            <img id="image2" src="img/2.jpg"
+                 class="hidden" alt="Casa en venta">
+
         </a>
-    </div>
 
-    <div class="info-section">
+    </section>
 
-    <?php while ($row = $result->fetch_assoc()) : ?>
-        <div class="info-section">
-            <div class="image-wrapper">
-                <a href="<?php echo $row['referencia']; ?>">
-                    <img src="<?php echo $row['imagen']; ?>" alt="Casa Descripción">
-                </a>
+
+    <!-- =====================================
+         4. SECCIÓN DE PROPIEDADES DESTACADAS
+    ====================================== -->
+    <main>
+
+        <section class="properties" id="propiedades">
+
+            <div class="section-title">
+                <h2>Propiedades destacadas</h2>
+                <p>Conoce algunas de nuestras mejores opciones.</p>
             </div>
-            <div class="info-text">
-                <h2><?php echo $row['titulo']; ?></h2>
-                <p><?php echo $row['descripcion']; ?></p>
+
+
+            <!-- Propiedad 1 -->
+            <article class="property-card" id="casas">
+
+                <div class="property-image">
+                    <a href="casa1.html">
+                        <img src="img/casa1.jpg" alt="Casa moderna">
+                    </a>
+                </div>
+
+                <div class="property-info">
+
+                    <h3>Casa Moderna y Espaciosa</h3>
+                    <h3>Precio 120000 $</h3>
+                    <p>
+                        Esta hermosa casa cuenta con un diseño moderno,
+                        amplios espacios y acabados de alta calidad.
+                        Ideal para familias que buscan confort y estilo.
+                    </p>
+
+                    <a href="casa1.html" class="property-button">
+                        Ver detalles
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- Propiedad 2 -->
+            <article class="property-card">
+
+                <div class="property-image">
+                    <a href="casa2.html">
+                        <img src="img/casa2.jpg" alt="Casa familiar">
+                    </a>
+                </div>
+
+                <div class="property-info">
+
+                    <h3>Casa Familiar</h3>
+                    <h3>Precio 90000 $</h3>
+                    <p>
+                        Vivienda con espacios cómodos, excelente
+                        distribución y ambientes adecuados para
+                        toda la familia.
+                    </p>
+
+                    <a href="casa2.html" class="property-button">
+                        Ver detalles
+                    </a>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =====================================
+             5. SECCIÓN SOBRE NOSOTROS
+        ====================================== -->
+        <section class="about" id="nosotros">
+
+            <h2>Sobre Red Cat</h2>
+
+            <p>
+                En Red Cat ofrecemos un espacio para encontrar
+                propiedades inmobiliarias, facilitando la búsqueda
+                de casas y otros inmuebles mediante información
+                organizada y accesible.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================
+         6. PIE DE PÁGINA (FOOTER)
+    ====================================== -->
+    <footer class="footer" id="contacto">
+
+        <div class="footer-container">
+
+            <!-- Información de la empresa -->
+            <div class="footer-section">
+
+                <h3>Red Cat</h3>
+
+                <p>
+                    Tu espacio para encontrar la propiedad
+                    que estás buscando.
+                </p>
+
             </div>
+
+
+            <!-- Enlaces rápidos -->
+            <div class="footer-section">
+
+                <h3>Enlaces rápidos</h3>
+
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#casas">Casas</a></li>
+                    <li><a href="#propiedades">Propiedades</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                </ul>
+
+            </div>
+
+
+            <!-- Información de contacto -->
+            <div class="footer-section">
+
+                <h3>Contacto</h3>
+
+                <p>Correo: contacto@redcat.com</p>
+                <p>Teléfono: +591 00000000</p>
+                <p>Ubicación: Bolivia</p>
+
+            </div>
+
+
         </div>
-    <?php endwhile; ?>
 
-    <!-- Formulario para agregar o actualizar -->
-    <form action="guardar.php" method="post">
-        <label for="imagen">Imagen:</label>
-        <input type="text" name="imagen" id="imagen" required>
-        
-        <label for="referencia">Referencia:</label>
-        <input type="text" name="referencia" id="referencia" required>
-        
-        <label for="titulo">Título:</label>
-        <input type="text" name="titulo" id="titulo" required>
-        
-        <label for="descripcion">Descripción:</label>
-        <textarea name="descripcion" id="descripcion" required></textarea>
-        
-        <button type="submit">Guardar</button>
-    </form>
+        <!-- Derechos reservados -->
+        <div class="footer-bottom">
 
-    </div>
+            <p>
+                &copy; 2026 Red Cat.
+                Todos los derechos reservados.
+            </p>
 
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================
+         7. JAVASCRIPT DEL CARRUSEL
+    ====================================== -->
     <script>
+
         const images = [
             {
                 src: "img/1.jpg",
                 link: "casa1.html",
-                text: "",
-                element: document.getElementById('image1')
+                text: "Casa Moderna y Espaciosa"
             },
             {
                 src: "img/2.jpg",
                 link: "casa2.html",
-                text: "",
-                element: document.getElementById('image2')
+                text: "Encuentra tu nuevo hogar"
             }
         ];
 
         let currentIndex = 0;
-        const imageLink = document.getElementById('image-link');
-        const imageText = document.getElementById('image-text');
+
+        const image1 = document.getElementById("image1");
+        const image2 = document.getElementById("image2");
+
+        const imageLink = document.getElementById("image-link");
+        const imageText = document.getElementById("image-text");
+
+        const imageElements = [image1, image2];
 
         setInterval(() => {
-            images[currentIndex].element.classList.add('hidden');
+
             currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].element.classList.remove('hidden');
+
+            imageElements[0].classList.toggle("hidden");
+            imageElements[1].classList.toggle("hidden");
+
             imageLink.href = images[currentIndex].link;
+
             imageText.textContent = images[currentIndex].text;
+
         }, 5000);
+
     </script>
+
+      <!-- El script va al FINAL, justo antes de cerrar el body:
+       así el navegador ya leyó todo el HTML y querySelector
+       sí encuentra los botones. Si lo pones arriba, no los halla. -->
+  <script src="script.js"></script>
+
 </body>
 </html>

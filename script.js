@@ -1,3 +1,4 @@
+// Esto es del modo día/noche. La idea es que el usuario pueda cambiar el tema de la página.
 // Primero agarramos los elementos con los que vamos a trabajar.
 const cuerpo = document.querySelector("body");
 const botonModo = document.querySelector("#btn-tema");
